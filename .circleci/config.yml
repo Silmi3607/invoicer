@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/Silmi3607/invoicer
     docker:
-      - image: circleci/golang:1.8
+      - image: circleci/golang:1.11
     environment:
       GO15VENDOREXPERIMENT: 1
     steps:
