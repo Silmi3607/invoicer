@@ -4,12 +4,24 @@ jobs:
   build:
     working_directory: /go/src/github.com/Silmi3607/invoicer
     docker:
-      - image: circleci/golang:1.11
+      - image: circleci/golang:1.8
     environment:
-      GO111MODULE: on
+      GO15VENDOREXPERIMENT: 1
     steps:
       - checkout
       - setup_remote_docker
+
+      - run: echo 'export GOPATH_HEAD="$(echo ${GOPATH}|cut -d ':' -f 1)"' >> $BASH_ENV
+      - run: echo 'export GOPATH_BASE="${GOPATH_HEAD}/src/github.com/Silmi3607"' >> $BASH_ENV
+      - run: mkdir -p "${GOPATH_BASE}"
+      - run: mkdir -p "${GOPATH_HEAD}/bin"
+
+      - run:
+          name: Initialize Go Modules
+          command: |
+            cd /go/src/github.com/Silmi3607/invoicer
+            go mod init github.com/Silmi3607/invoice || true
+            go mod tidy
 
       - run:
           name: Build application
