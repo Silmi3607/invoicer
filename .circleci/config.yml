@@ -12,7 +12,7 @@ jobs:
       - setup_remote_docker
 
       - run: echo 'export GOPATH_HEAD="$(echo ${GOPATH}|cut -d ':' -f 1)"' >> $BASH_ENV
-      - run: echo 'export GOPATH_BASE="${GOPATH_HEAD}/src/github.com/invoice"' >> $BASH_ENV
+      - run: echo 'export GOPATH_BASE="${GOPATH_HEAD}/src/github.com/invoicer"' >> $BASH_ENV
       - run: mkdir -p "${GOPATH_BASE}"
       - run: mkdir -p "${GOPATH_HEAD}/bin"
       - run: go get github.com/govend/govend
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Build application
           command: |
-            go install --ldflags '-extldflags "-static"' github.com/invoice/${CIRCLE_PROJECT_REPONAME};
+            go install --ldflags '-extldflags "-static"' github.com/Silmi3607/invoicer;
             mkdir -p bin;
             cp "${GOPATH_HEAD}/bin/${CIRCLE_PROJECT_REPONAME}" bin/invoicer;
             echo "Application built successfully."
