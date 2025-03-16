@@ -2,7 +2,7 @@ version: 2.1
 
 jobs:
   build:
-    working_directory: /go/src/github.com/invoice/invoicer-chapter3
+    working_directory: /go/src/github.com/Silmi3607/invoicer
     docker:
       - image: circleci/golang:1.8
     environment:
@@ -12,17 +12,22 @@ jobs:
       - setup_remote_docker
 
       - run: echo 'export GOPATH_HEAD="$(echo ${GOPATH}|cut -d ':' -f 1)"' >> $BASH_ENV
-      - run: echo 'export GOPATH_BASE="${GOPATH_HEAD}/src/github.com/invoicer"' >> $BASH_ENV
+      - run: echo 'export GOPATH_BASE="${GOPATH_HEAD}/src/github.com/Silmi3607"' >> $BASH_ENV
       - run: mkdir -p "${GOPATH_BASE}"
       - run: mkdir -p "${GOPATH_HEAD}/bin"
-      - run: go get github.com/govend/govend
+
+      - run:
+          name: Initialize Go Modules
+          command: |
+            cd /go/src/github.com/Silmi3607/invoicer
+            go mod init github.com/Silmi3607/invoicer || true
+            go mod tidy
 
       - run:
           name: Build application
           command: |
-            go install --ldflags '-extldflags "-static"' github.com/Silmi3607/invoicer;
-            mkdir -p bin;
-            cp "${GOPATH_HEAD}/bin/${CIRCLE_PROJECT_REPONAME}" bin/invoicer;
+            cd /go/src/github.com/Silmi3607/invoicer
+            go build -o bin/invoicer .
             echo "Application built successfully."
 
       - run:
