@@ -1,3 +1,12 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: /go/src/github.com/invoice/invoicer-chapter3
+    docker:
+      - image: circleci/golang:1.8
+    environment:
+      GO15VENDOREXPERIMENT: 1
     steps:
       - checkout
       - setup_remote_docker
@@ -35,4 +44,3 @@ workflows:
   build_and_deploy:
     jobs:
       - build
-
