@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 jobs:
   build:
     working_directory: /go/src/github.com/Silmi3607/invoicer-chapter3
@@ -8,7 +8,7 @@ jobs:
       GO15VENDOREXPERIMENT: 1
     branches:
       only:
-        - master
+        - main
     steps:
       - checkout
       - setup_remote_docker
@@ -22,9 +22,9 @@ jobs:
       - run:
           name: Build application
           command: |
-            go install --ldflags '-extldflags "-static"' github.com/invoice/${CIRCLE_PROJECT_REPONAME};
+            go install --ldflags '-extldflags "-static"' github.com/invoicer;
             mkdir -p bin;
-            cp "${GOPATH_HEAD}/bin/${CIRCLE_PROJECT_REPONAME}" bin/invoicer;
+            cp "${GOPATH_HEAD}/bin/invoicer" bin/invoicer;
             echo "Application built successfully."
 
       - run:
@@ -40,3 +40,9 @@ jobs:
           command: |
             ssh User@192.168.0.107 "${DEPLOY_DIR}/invoicer &"
           background: true
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build
